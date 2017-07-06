@@ -1,7 +1,6 @@
 import * as React from 'react';
 import './App.css';
 import {VictoryChart, VictoryLine} from 'victory';
-
 import {Observable} from 'rxjs';
 
 
@@ -14,14 +13,15 @@ class App extends React.Component<{}, {data: Array<any>}> {
       data: []
     }
 
-    Observable.interval(1000)
+    Observable.interval(50)
         .map(data => Math.random() * 10)
         .subscribe((r) => {
           let data: Array<any> = this.state.data;
           if (data.length > 10) {
             data.shift();
           }
-          data.push({a: new Date().toTimeString().substring(0, 8), b: r});
+          const date:Date = new Date();
+          data.push({a: date.toTimeString().substring(0, 8) + ':' + date.getMilliseconds(), b: r});
           this.setState({data: data});
         });
   }
@@ -33,7 +33,7 @@ class App extends React.Component<{}, {data: Array<any>}> {
   
     return (
       <div className="App">
-        <VictoryChart style={style} width={800}>
+        <VictoryChart style={style} width={1100}>
           <VictoryLine data={this.state.data} x="a"
               y="b"/>
         </VictoryChart>
